@@ -143,3 +143,26 @@ Tunnel fails to start:
 HeidiSQL opens but cannot connect:
   Confirm the saved session uses TCP/IP, LOCAL_HOST, LOCAL_PORT, and valid
   MariaDB credentials.
+
+Two HeidiSQL sessions at the same time:
+  To use an existing HeidiSQL connection alongside the SSH tunnel connection:
+
+  1. Open HeidiSQL.
+  2. Go to Tools > Preferences and locate the "Allow multiple instances"
+     setting. Enable it so the launcher can open a separate HeidiSQL instance
+     without interfering with the existing session.
+  3. Keep the existing HeidiSQL session open.
+  4. Open PowerShell manually and run the launcher explicitly, replacing the
+     example path with the actual location of ABPPR-ssh.ps1:
+
+     powershell.exe -NoProfile -NoExit -ExecutionPolicy Bypass -File "C:\path\to\ABPPR-ssh.ps1"
+
+  5. If the launcher refuses to start because HeidiSQL is already running,
+     check CHECK_EXISTING_HEIDISQL in .env. Set it to false only if you want
+     to allow the launcher to start while another HeidiSQL instance is open.
+  6. Ensure the ABPPR_ssh saved session connects to 127.0.0.1 using the
+     configured LOCAL_PORT (3307 by default).
+
+  Keep the existing connection settings unchanged. When the SSH-connected
+  HeidiSQL instance closes, the launcher should stop only the SSH process
+  it started.
