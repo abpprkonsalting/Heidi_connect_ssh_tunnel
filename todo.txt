@@ -1,0 +1,33 @@
+ABPPR SSH Tunnel Launcher - Future Improvements
+=================================================
+
+These items are deferred beyond version 1.0.
+
+1. Real MariaDB readiness check
+   - Run SELECT 1 through the tunnel before opening HeidiSQL.
+   - Do not store database passwords in .env or expose them on the command line.
+   - Distinguish database authentication failures from server unavailability.
+
+2. More robust SSH diagnostics
+   - Capture SSH stdout/stderr in a log file and report useful errors.
+   - Handle host-key verification with clear, secure guidance.
+   - Improve cleanup confirmation and handling of abnormal exits.
+
+3. Runtime connection health
+   - Test database responsiveness during the session, not only ssh.exe process
+     liveness.
+   - Define reconnect/retry behavior if the tunnel drops.
+
+4. Configuration hardening
+   - Consider a PowerShell-native .psd1 configuration alternative if stronger
+     typing or more complex settings become necessary.
+   - Validate all hostname and port ranges more comprehensively.
+   - Either implement SHOW_MESSAGES/SSH_PROCESS_NAME semantics fully or remove
+     redundant settings.
+   - Consider structured logging and log retention.
+
+5. Packaging and tests
+   - Test on supported Windows PowerShell/PowerShell versions and HeidiSQL
+     versions.
+   - Add automated tests for invalid/missing .env settings.
+   - Add release notes, license, and a sanitized public configuration template.
