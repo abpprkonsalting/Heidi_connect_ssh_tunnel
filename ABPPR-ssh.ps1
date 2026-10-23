@@ -12,7 +12,7 @@ $LocalPort = 3307
 $DbTarget  = "127.0.0.1:3306"
 
 $Session   = "ABPPR_ssh"
-$HeidiExe  = "C:\Program Files\HeidiSQL\heidisql.exe"
+$HeidiExe  = "C:\Users\armbp\AppData\Local\Programs\HeidiSQL\heidisql.exe"
 
 $sshProcess = $null
 $heidiProcess = $null
