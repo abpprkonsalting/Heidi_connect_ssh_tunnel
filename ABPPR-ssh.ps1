@@ -1,4 +1,3 @@
-```powershell
 # ABPPR-ssh.ps1
 # Starts SSH tunnel, opens HeidiSQL, and closes the tunnel on exit.
 
@@ -140,4 +139,3 @@ finally {
 
     Write-Host "Finished."
 }
-```
