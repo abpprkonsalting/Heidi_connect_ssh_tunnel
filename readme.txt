@@ -96,7 +96,7 @@ OPTION 2: CREATE A WINDOWS DESKTOP SHORTCUT
 2. Select New > Shortcut.
 3. In the location field, enter the following command, replacing the example path with the actual folder containing ABPPR-ssh.ps1 and .env:
 
-powershell.exe -NoProfile -ExecutionPolicy Bypass -File "C:\path\to\ABPPR_ssh_v1.0\ABPPR-ssh.ps1"
+powershell.exe -NoProfile -NoExit -ExecutionPolicy Bypass -File "C:\path\to\ABPPR_ssh_v1.0\ABPPR-ssh.ps1"
 
 4. Click Next.
 5. Name the shortcut ABPPR SSH Tunnel.
