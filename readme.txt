@@ -43,6 +43,98 @@ INSTALLATION
 
    powershell.exe -ExecutionPolicy Bypass -File "C:\path\to\ABPPR-ssh.ps1"
 
+SERVER-SIDE SSH SETUP (DEBIAN / UBUNTU)
+-------------------------------------
+
+The VPS must accept SSH connections from the Windows client using public-key
+authentication. The following steps describe a basic OpenSSH server setup.
+
+1. Install and enable the SSH server:
+
+   sudo apt update
+   sudo apt install openssh-server
+   sudo systemctl enable --now ssh
+
+2. Create a dedicated SSH account if one does not already exist:
+
+   sudo adduser <SSH_USERNAME>
+
+   Replace <SSH_USERNAME> with the intended Linux account name. An existing,
+   appropriately secured account may be used instead. Do not use the root
+   account for routine tunnel access.
+
+3. Configure public-key authentication:
+
+   On the Windows client, generate an SSH key pair if necessary. Keep the
+   private key on Windows and install only the public key on the VPS.
+
+   Create the SSH directory and authorized_keys file for the account.
+   Replace <SSH_USERNAME> and <SSH_HOME> with the account name and its actual
+   home directory:
+
+   sudo install -d -m 700 -o <SSH_USERNAME> -g <SSH_USERNAME> <SSH_HOME>/.ssh
+   sudo touch <SSH_HOME>/.ssh/authorized_keys
+   sudo chown <SSH_USERNAME>:<SSH_USERNAME> <SSH_HOME>/.ssh/authorized_keys
+   sudo chmod 600 <SSH_HOME>/.ssh/authorized_keys
+
+   Add the public key to authorized_keys without overwriting existing keys.
+   Confirm that the account's home directory and SSH files have the correct
+   ownership and permissions.
+
+4. Verify the SSH server configuration:
+
+   Check /etc/ssh/sshd_config and any applicable files under
+   /etc/ssh/sshd_config.d/. Ensure public-key authentication is enabled and
+   that the configuration permits the intended account to connect.
+
+   Validate the configuration before applying changes:
+
+   sudo sshd -t
+
+   If the configuration is valid, reload the SSH service:
+
+   sudo systemctl reload ssh
+
+5. Configure the firewall:
+
+   Allow inbound connections to the configured SSH port from the intended
+   client IP addresses, where practical.
+
+   If changing the SSH port, ensure the SSH server configuration, firewall
+   rules, and SSH_PORT in .env all match. Keep an existing SSH session open
+   while making changes, so you can recover if the new configuration fails.
+
+6. Test the connection from Windows:
+
+   ssh -p <SSH_PORT> -i "<PRIVATE_KEY_PATH>" <SSH_USERNAME>@<SSH_HOST>
+
+   Replace the placeholders with the actual SSH port, private-key path,
+   username, and server hostname or IP address.
+
+   Verify the server's host-key fingerprint before trusting the connection.
+   Do not blindly accept an unexpected host key.
+
+7. Keep the database private:
+
+   For a database accessed through a local SSH tunnel, configure the database
+   to listen on the appropriate loopback interface on the VPS. Confirm that
+   the configured REMOTE_DB_HOST and REMOTE_DB_PORT in .env match the actual
+   database endpoint as seen from the VPS.
+
+   Do not expose the database port to the public internet merely to enable
+   remote access. The SSH tunnel should provide the required access.
+
+SECURITY NOTES
+--------------
+- Keep the private key on the Windows client; install only its public key
+  on the VPS.
+- Protect the SSH account and private key.
+- Restrict SSH access through the firewall where practical.
+- Do not disable password authentication until key-based access has been
+  tested successfully and an alternative recovery method is available.
+- Preserve an existing SSH session while changing SSH configuration.
+- Back up configuration files before modifying them.
+
 CONFIGURATION
 -------------
 The launcher reads operational settings from .env. It accepts KEY=VALUE lines,
